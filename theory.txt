@@ -1,0 +1,58 @@
+It is a complete project where we are going to clean the data and train the model and converting the model into a website and hosting it.
+
+Types of Recommender systems:
+1,Content based: Recommending based on the content(tags will be created.)
+2,Collaborative filtering: based on user interest.
+3,Hybrid: mixing of content and collaborative.
+
+Project Flow:
+
+Data -> Preprocessing -> Model -> Training -> Testing -> Website -> Deployment
+(preprocesing: converting the data as per our needs.)
+
+Dataset is collected from kaggle website(tmdb)
+now, combine both the files movies and cast files for easily accessing
+next, select the required columns and remove the remaining columns
+
+remove null value rows from the movies
+
+remove duplicates rows from the movies
+
+we need to fix the genres and remaining data
+
+we are creating an helper function for our requirements.
+But the problem is we need list but, here it is a string of list.
+So, we are using ast module to solve this issue.
+
+applying that function to each and every column of genres
+
+succesfully we changed genres and keywords column as per our requirments.
+
+In, cast we need only top 3 characters. So, we need to modify our function.
+
+In crew we need only director name so modify it accordingly
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+after vectorization
+we got our 5000 words, but in that list of words we have a problem of similar words like actor and actors.
+apply stemming on the data
+example: ['loving','loved','love]
+it will return ['love','love','love']
+
+

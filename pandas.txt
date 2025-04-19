@@ -1,0 +1,12 @@
+pandas
+
+file_name.head()  -> for top 5 values
+file_name.tail()  -> for bottom 5 values
+file_name.head(1)['column'].values  -> complete information about that column
+file_name.merge(file_name2,on="common_column") -> to merge two files
+file_name.shape  -> to know the shape of the file(rows, columns)
+file_name=file_name[['column1','column2']] -> to select some columns from the files.
+file_name.isnull().sum() -> To check null values in the file
+file_name.duplicated().sum()  -> TO check duplicate rows in the file
+file_name.dropna(inplace=True)  -> TO delete null rows in the file
+file_name['column1'].apply(func1)  -> To apply a function for every row in a particular column
