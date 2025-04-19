@@ -12,7 +12,7 @@ pipeline {
         stage("Clone Code") {
             steps {
                 echo "Cloning the code"
-                git url: "https://github.com/NarlaRushikesh/movie-recommender.git", branch: "main"
+                git url: "https://github.com/NarlaRushikesh/Movie-Recommendation-System.git", branch: "main"
             }
         }
 
