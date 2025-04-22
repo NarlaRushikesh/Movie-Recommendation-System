@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
-
+   
 WORKDIR /app
 COPY . /app
 RUN pip install --upgrade pip setuptools wheel build
