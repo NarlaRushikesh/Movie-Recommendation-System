@@ -1,6 +1,6 @@
 pipeline {
     agent any
-
+ 
     environment {
         IMAGE_NAME = "movie-recommender"
         TAG = "latest"
