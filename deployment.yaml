@@ -30,7 +30,10 @@ spec:
             - name: SPLUNK_HEC_URL
               value: "http://splunk-service:8088"
             - name: SPLUNK_TOKEN
-              value: "4fc0fc47-2d1c-4039-8986-e554bb1f9008"
+                valueFrom:
+                  secretKeyRef:
+                    name: splunk-secret
+                    key: SPLUNK_TOKEN
             - name: SPLUNK_INDEX
               value: "main"
 
@@ -58,3 +61,4 @@ spec:
               port: 8501
             initialDelaySeconds: 30
             periodSeconds: 20
+
