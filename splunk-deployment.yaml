@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: splunk
+  labels:
+    app: splunk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: splunk
+  template:
+    metadata:
+      labels:
+        app: splunk
+    spec:
+      securityContext:
+        runAsUser: 0   # ✅ run as root
+      initContainers:
+        - name: setup-hec
+          image: busybox
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "[http]" > /hec/inputs.conf;
+              echo "disabled = 0" >> /hec/inputs.conf;
+              echo "enableSSL = 0" >> /hec/inputs.conf;
+              echo "[http://main]" >> /hec/inputs.conf;
+              echo "token = 4fc0fc47-2d1c-4039-8986-e554bb1f9008" >> /hec/inputs.conf;
+              echo "index = main" >> /hec/inputs.conf;
+              echo "disabled = 0" >> /hec/inputs.conf;
+          volumeMounts:
+            - name: splunk-etc
+              mountPath: /hec
+
+      containers:
+        - name: splunk
+          image: splunk/splunk:9.2.2
+          env:
+            - name: SPLUNK_START_ARGS
+              value: "--accept-license --answer-yes"
+            - name: SPLUNK_PASSWORD
+              value: "changeme123"
+            - name: SPLUNK_GENERAL_TERMS
+              value: --accept-sgt-current-at-splunk-com
+          ports:
+            - containerPort: 8000  # Web UI
+            - containerPort: 8088  # HEC endpoint
+            - containerPort: 8089  # Management
+          volumeMounts:
+            - name: splunk-etc
+              mountPath: /opt/splunk/etc/system/local
+
+      volumes:
+        - name: splunk-etc
+          emptyDir: {}

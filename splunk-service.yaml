@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: splunk-service
+  labels:
+    app: splunk
+spec:
+  # 🔹 NodePort allows external browser access in Minikube
+  type: NodePort
+
+  selector:
+    app: splunk
+
+  ports:
+    # 🔹 Splunk Web UI
+    - name: web
+      port: 8000           # Internal cluster port
+      targetPort: 8000     # Container port
+      nodePort: 30080      # External access via minikube-ip:30080
+
+    # 🔹 Splunk HEC endpoint (used by your Streamlit app)
+    - name: hec
+      port: 8088           # Internal cluster port
+      targetPort: 8088     # Container port
+      nodePort: 30088      # Optional external access if needed
+
+    # 🔹 Splunk Management API
+    - name: mgmt
+      port: 8089
+      targetPort: 8089
+      nodePort: 30089
