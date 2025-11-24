@@ -1,0 +1,34 @@
+---
+- name: Install and configure NRPE for Nagios monitoring
+  hosts: azure_vms
+  become: yes
+
+  vars:
+    nagios_server_ip: "192.168.1.100"   # Replace with your Nagios server IP
+
+  tasks:
+
+    - name: Update packages
+      apt:
+        update_cache: yes
+
+    - name: Install NRPE and plugins
+      apt:
+        name:
+          - nagios-nrpe-server
+          - nagios-plugins
+          - nagios-plugins-basic
+          - nagios-plugins-common
+        state: present
+
+    - name: Allow Nagios server access
+      lineinfile:
+        path: /etc/nagios/nrpe.cfg
+        regexp: '^allowed_hosts='
+        line: "allowed_hosts=127.0.0.1, {{ nagios_server_ip }}"
+
+    - name: Enable & restart NRPE service
+      systemd:
+        name: nagios-nrpe-server
+        state: restarted
+        enabled: yes

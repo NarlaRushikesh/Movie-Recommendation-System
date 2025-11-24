@@ -1,0 +1,11 @@
+###############################################################################
+# NRPE CONFIG TEMPLATE FOR AZURE VMs
+###############################################################################
+
+# Nagios Server that is allowed to connect
+allowed_hosts=127.0.0.1, NAGIOS_SERVER_IP
+
+# Command Definitions
+command[check_load]=/usr/lib/nagios/plugins/check_load -w 5,4,3 -c 10,6,4
+command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 20% -c 10% -p /
+command[check_http]=/usr/lib/nagios/plugins/check_http -p 8000

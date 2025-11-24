@@ -1,0 +1,60 @@
+---
+- name: Deploy Movie Recommender App on Azure VMs
+  hosts: azure_vms
+  become: yes
+
+  vars:
+    image_name: "narlarushikesh/movie-recommender:latest"
+    container_name: "movie-recommender"
+    app_port: 8000
+
+  tasks:
+
+    - name: Update APT cache
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repo
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Stop any existing container
+      shell: |
+        docker rm -f {{ container_name }} || true
+      ignore_errors: yes
+
+    - name: Pull latest Docker image
+      shell: |
+        docker pull {{ image_name }}
+
+    - name: Run container
+      shell: |
+        docker run -d --name {{ container_name }} -p {{ app_port }}:{{ app_port }} {{ image_name }}
